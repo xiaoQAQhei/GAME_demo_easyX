@@ -119,6 +119,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,26 +129,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bullet.cpp" />
-    <ClCompile Include="player.cpp" />
-    <ClCompile Include="rebound.cpp" />
-    <ClCompile Include="util.cpp" />
-    <ClCompile Include="源.cpp" />
+    <ClCompile Include="src\bullet.cpp" />
+    <ClCompile Include="src\player.cpp" />
+    <ClCompile Include="src\rebound.cpp" />
+    <ClCompile Include="src\util.cpp" />
+    <ClCompile Include="src\源.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bullet.h" />
-    <ClInclude Include="gameScene.h" />
-    <ClInclude Include="map.h" />
-    <ClInclude Include="map1.h" />
-    <ClInclude Include="map2.h" />
-    <ClInclude Include="mapManager.h" />
-    <ClInclude Include="mapSelectScene.h" />
-    <ClInclude Include="menuScene.h" />
-    <ClInclude Include="player.h" />
-    <ClInclude Include="rebound.h" />
-    <ClInclude Include="scene.h" />
-    <ClInclude Include="sceneManager.h" />
-    <ClInclude Include="util.h" />
+    <ClInclude Include="include\bullet.h" />
+    <ClInclude Include="include\gameScene.h" />
+    <ClInclude Include="include\map.h" />
+    <ClInclude Include="include\map1.h" />
+    <ClInclude Include="include\map2.h" />
+    <ClInclude Include="include\mapManager.h" />
+    <ClInclude Include="include\mapSelectScene.h" />
+    <ClInclude Include="include\menuScene.h" />
+    <ClInclude Include="include\player.h" />
+    <ClInclude Include="include\rebound.h" />
+    <ClInclude Include="include\scene.h" />
+    <ClInclude Include="include\sceneManager.h" />
+    <ClInclude Include="include\util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

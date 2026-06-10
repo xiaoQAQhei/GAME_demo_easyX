@@ -86,7 +86,7 @@ private:
     const double maxSpeed = 8.0;
     const double PlusRepelSpeed = 40.0;
     const double repelamount = 25.0;
-    const double jumpspeed = 25.0;
+    const double jumpspeed = 15.0;
     const double friction = 0.4;
 
     int goldtimer = 0;

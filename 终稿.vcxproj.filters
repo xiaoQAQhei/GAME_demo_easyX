@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="资源文件">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="头文件\map">
       <UniqueIdentifier>{a179fc82-d712-4fda-b970-62335e9e8d46}</UniqueIdentifier>
     </Filter>
@@ -21,60 +17,60 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="源.cpp">
+    <ClCompile Include="src\源.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="bullet.cpp">
+    <ClCompile Include="src\bullet.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="player.cpp">
+    <ClCompile Include="src\player.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="rebound.cpp">
+    <ClCompile Include="src\rebound.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="util.cpp">
+    <ClCompile Include="src\util.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="player.h">
+    <ClInclude Include="include\player.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="bullet.h">
+    <ClInclude Include="include\bullet.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="rebound.h">
+    <ClInclude Include="include\rebound.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="map.h">
+    <ClInclude Include="include\map.h">
       <Filter>头文件\map</Filter>
     </ClInclude>
-    <ClInclude Include="map1.h">
+    <ClInclude Include="include\map1.h">
       <Filter>头文件\map</Filter>
     </ClInclude>
-    <ClInclude Include="map2.h">
+    <ClInclude Include="include\map2.h">
       <Filter>头文件\map</Filter>
     </ClInclude>
-    <ClInclude Include="mapManager.h">
+    <ClInclude Include="include\mapManager.h">
       <Filter>头文件\map</Filter>
     </ClInclude>
-    <ClInclude Include="scene.h">
+    <ClInclude Include="include\scene.h">
       <Filter>头文件\scene</Filter>
     </ClInclude>
-    <ClInclude Include="menuScene.h">
+    <ClInclude Include="include\menuScene.h">
       <Filter>头文件\scene</Filter>
     </ClInclude>
-    <ClInclude Include="gameScene.h">
+    <ClInclude Include="include\gameScene.h">
       <Filter>头文件\scene</Filter>
     </ClInclude>
-    <ClInclude Include="sceneManager.h">
+    <ClInclude Include="include\sceneManager.h">
       <Filter>头文件\scene</Filter>
     </ClInclude>
-    <ClInclude Include="util.h">
+    <ClInclude Include="include\util.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="mapSelectScene.h">
+    <ClInclude Include="include\mapSelectScene.h">
       <Filter>头文件\scene</Filter>
     </ClInclude>
   </ItemGroup>
