@@ -1,11 +1,24 @@
 #include<graphics.h>
 #include<iostream>
 #include<windows.h>
+#include<mmsystem.h>
 #include<vector>
 #include<string>
 #include<cmath>
 #include<conio.h>
+#include<timeapi.h>
 #include"scene.h"
+
+#pragma comment(lib,"Winmm.lib")
+
+// È´òÁ≤æÂ∫¶ËÆ°Êó∂Âô®
+LARGE_INTEGER frequency;
+void InitTimer() { QueryPerformanceFrequency(&frequency); }
+double GetTime() {
+	LARGE_INTEGER counter;
+	QueryPerformanceCounter(&counter);
+	return (double)counter.QuadPart / frequency.QuadPart;
+}
 #include"menuScene.h"
 #include"gameScene.h"
 #include"sceneManager.h"
@@ -19,7 +32,7 @@
 #include"rebound.h"
 using namespace std;
 
-
+#pragma comment(lib,"Winmm.lib")
 SceneManager scene_manager;
 MapManager map_manager;
 
@@ -41,17 +54,26 @@ vector<IMAGE> firework(2);
 vector<IMAGE> nut_run_left(3);
 vector<IMAGE> nut_run_right(3);
 vector<IMAGE> nut_die(2);
+vector<IMAGE> paimon_die(2);
 
 vector<IMAGE> bow_pulling_left(4);
 vector<IMAGE> bow_pulling_right(4);
 vector<IMAGE> crossbow_pulling_left(5);
 vector<IMAGE> crossbow_pulling_right(5);
+
+vector<IMAGE> P_winner(2);
+IMAGE P_winner_idx;
+
 IMAGE GameMap;
 IMAGE iron_door;
 IMAGE signboard;
 IMAGE P1;
 IMAGE P2;
-
+IMAGE alert;
+IMAGE golden_chestplate;
+IMAGE avatar_paimon;
+IMAGE avatar_nut;
+IMAGE normal_arrow;
 
 
 const int g = 3;
@@ -79,6 +101,18 @@ bool gameRestart = false;
 
 
 void loadOtherAnimation() {
+	loadimage(&normal_arrow, L"img/normal_arrow.png");
+
+	loadimage(&P_winner[0], L"img/1P_winner.png");
+	loadimage(&P_winner[1], L"img/2P_winner.png");
+
+	loadimage(&avatar_paimon, L"img/avatar_paimon.png");
+	loadimage(&avatar_nut, L"img/avatar_nut.png");
+
+	loadimage(&golden_chestplate, L"img/golden_chestplate.png", 50, 50);
+
+	loadimage(&alert, L"img/alert.png");
+
 	loadimage(&P1, L"img/1P_cursor.png", 100, 100);
 	loadimage(&P2, L"img/2P_cursor.png", 100, 100);
 
@@ -100,6 +134,9 @@ void loadOtherAnimation() {
 		loadimage(&bow_pulling_right[i], s2.c_str(),50,50);
 	}
 
+	loadimage(&paimon_die[0], L"img/paimon_die_left.png");
+	loadimage(&paimon_die[1], L"img/paimon_die_right.png");
+
 	loadimage(&nut_die[0], L"img/nut_die_left.png");
 	loadimage(&nut_die[1], L"img/nut_die_right.png");
 
@@ -110,11 +147,11 @@ void loadOtherAnimation() {
 		loadimage(&nut_run_right[i], s2.c_str());
 	}
 
-	loadimage(&firework[0], L"img/firework_rocket.png",120,120);
-	loadimage(&firework[1], L"img/firework_rocket_right.png",120,120);
+	loadimage(&firework[0], L"img/firework_rocket.png", 100, 100);
+	loadimage(&firework[1], L"img/firework_rocket_right.png", 100, 100);
 
-	loadimage(&spectral_arrow[0], L"img/spectral_arrow.png",120,120);
-	loadimage(&spectral_arrow[1], L"img/spectral_arrow_right.png",120,120);
+	loadimage(&spectral_arrow[0], L"img/spectral_arrow.png",130,130);
+	loadimage(&spectral_arrow[1], L"img/spectral_arrow_right.png", 130, 130);
 
 	loadimage(&arrow[0], L"img/arrow.png",60,60);
 	loadimage(&arrow[1], L"img/arrow_right.png",60,60);
@@ -143,41 +180,40 @@ void loadOtherAnimation() {
 	}
 }
 
-void Show(player& p) {
-	if (p.choose == 1) {
-		settextcolor(RED);
-		settextstyle(40, 15, _T("Œ¢»Ì—≈∫⁄"));
-		wstring s = L"P1 HP£∫" + to_wstring(p.HP);
-		outtextxy(0, 0, s.c_str());
-	}
-	else if (p.choose == 2) {
-		settextcolor(LIGHTBLUE);
-		settextstyle(40, 15, _T("Œ¢»Ì—≈∫⁄"));
-		wstring s = L"P2 HP£∫" + to_wstring(p.HP);
-		outtextxy(GameW - 200, 0, s.c_str());
+void logic_updateplayer(player& p, player& enemy) {
+	if (!p.isDeath) {
+		p.Move();
+		p.Rebound(enemy);
+		p.BulletFilling();
+		p.Shot();
+		p.Hurt(enemy);
+		p.Live();
+		p.Counttimer();
 	}
 }
 
-void updateplayer(player& p, player& enemy) {
-	p.Move();
-	p.Rebound(enemy);
-	p.Shot();
-	p.Hurt(enemy);
-	p.Live();
-	p.Counttimer();
+void renderplayer(player& p) {
 	p.Draw();
 }
 
 
-void updateGame(player& p1, player& p2) {
-	updateplayer(p1, p2);
-	updateplayer(p2, p1);
-
-	updatebullet(p1.bullet_list);
-	updatebullet(p2.bullet_list);
-
+void logic_updateGame(player& p1, player& p2) {
 	map_manager.on_update(p1);
 	map_manager.on_update(p2);
+
+	logic_updateplayer(p1, p2);
+	logic_updateplayer(p2, p1);
+
+	movebullet(p1.bullet_list);
+	movebullet(p2.bullet_list);
+}
+
+void renderGame(player& p1, player& p2) {
+	renderplayer(p1);
+	renderplayer(p2);
+
+	drawbullets(p1.bullet_list);
+	drawbullets(p2.bullet_list);
 }
 
 void ResetGame(player& p1, player& p2) {
@@ -185,9 +221,24 @@ void ResetGame(player& p1, player& p2) {
 	p2.Reset();
 }
 
+void loadmusic() {
+	mciSendString(L"open mus/bgm1.MP3 alias bgm1", NULL, 0, NULL);
+	mciSendString(L"open mus/bgm2.MP3 alias bgm2", NULL, 0, NULL);
+	mciSendString(L"open mus/bowhit.MP3 alias hit", NULL, 0, NULL);
+	mciSendString(L"open mus/bowshoot.MP3 alias shoot", NULL, 0, NULL);
+	mciSendString(L"open mus/iron_door_close.MP3 alias iron_door", NULL, 0, NULL);
+	mciSendString(L"open mus/sign.MP3 alias signboard", NULL, 0, NULL);
+	mciSendString(L"open mus/ÈìÅÁ†ß.MP3 alias rebound", NULL, 0, NULL);
+	mciSendString(L"open mus/click_stereo.MP3 alias exitgame", NULL, 0, NULL);
+	mciSendString(L"open mus/levelup.MP3 alias startgame", NULL, 0, NULL);
+}
+
 int main() {
+	timeBeginPeriod(1);
+	InitTimer();
 
 	initgraph(GameW, GameH);
+	loadmusic();
 
 	player p1(370, 400, 40, L"paimon", 1, 6);
 	player p2(1225, 400, 46, L"nut_idle", 2, 3);
@@ -205,13 +256,11 @@ int main() {
 	scene_manager.set_current_scene(menu_scene);
 	map_manager.set_current_map(map1);
 
+	const double target_frame_time = 1.0 / 60.0;
+
 	BeginBatchDraw();
 	while (running) {
-		DWORD start_time = GetTickCount();
-		if (gameRestart) {
-			ResetGame(p1, p2);
-			gameRestart = false;
-		}
+		double frame_start_time = GetTime();
 
 		while (peekmessage(&msg))
 		{
@@ -220,22 +269,34 @@ int main() {
 			scene_manager.on_input(msg);
 		}
 
+		if (gameRestart) {
+			ResetGame(p1, p2);
+			gameRestart = false;
+		}
 		scene_manager.on_update();
+		if (gamerunning) {
+			logic_updateGame(p1, p2);
+		}
 
-
-		cleardevice();
 		scene_manager.on_draw();
-		if (gamerunning)updateGame(p1, p2);
+		if (gamerunning) {
+			renderGame(p1, p2);
+		}
 
 		FlushBatchDraw();
-
-		DWORD end_time = GetTickCount();
-		DWORD delta_time = end_time - start_time;
-		if (delta_time < 1000 / 60) {
-			Sleep(1000 / 60 - delta_time);
+	
+		double frame_end_time = GetTime();
+		double delta_time = frame_end_time - frame_start_time;
+		if (delta_time < target_frame_time) {
+			DWORD sleep_ms = (DWORD)((target_frame_time - delta_time) * 1000);
+			if (sleep_ms > 1) Sleep(sleep_ms - 1);
+			while (GetTime() - frame_start_time < target_frame_time) {
+				YieldProcessor();
+			}
 		}
 	}
 	EndBatchDraw();
 
+	timeEndPeriod(1);
 	return 0;
 }

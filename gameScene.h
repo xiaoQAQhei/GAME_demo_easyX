@@ -21,6 +21,8 @@ public:
 	~GameScene() = default;
 
 	void on_enter() {
+		mciSendString(L"stop bgm1", NULL, 0, NULL);
+		mciSendString(L"stop bgm2", NULL, 0, NULL);
 		gamerunning = true;
 
 		BeginBatchDraw();
@@ -41,10 +43,19 @@ public:
 	}
 	void on_input(const ExMessage& msg) {
 		if (gameover && msg.vkcode == 'E') {
+			mciSendString(L"play exitgame from 0", NULL, 0, NULL);
+			Sleep(300);
 			scene_manager.switch_to(SceneManager::SceneType::Menu);
 		}
 		else if (gameover && msg.vkcode == 'Q') {
+			mciSendString(L"play exitgame from 0", NULL, 0, NULL);
+			Sleep(300);
 			running=false;
+		}
+		else if (gameover && msg.vkcode == 'R') {
+			mciSendString(L"play exitgame from 0", NULL, 0, NULL);
+			Sleep(300);
+			scene_manager.switch_to(SceneManager::SceneType::Game);
 		}
 	}
 	void on_exit() {

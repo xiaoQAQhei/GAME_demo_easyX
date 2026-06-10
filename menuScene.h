@@ -65,6 +65,7 @@ public:
 		if (start_button_x <= msg.x && msg.x <= start_button_x + start_button_w && start_button_y <= msg.y && msg.y <= start_button_y + start_button_h) {
 			StartGameButton = startGameButton[1];
 			if (msg.message == WM_LBUTTONDOWN) {
+				mciSendString(L"play startgame from 0", NULL, 0, NULL);
 				StartGameButton = startGameButton[2];
 				is_start_game = true;
 			}
@@ -76,6 +77,8 @@ public:
 		if (exit_button_x <= msg.x && msg.x <= exit_button_x + exit_button_w && exit_button_y <= msg.y && msg.y <= exit_button_y + exit_button_h) {
 			ExitGameButton = exitGameButton[1];
 			if (msg.message == WM_LBUTTONDOWN) {
+				mciSendString(L"play exitgame from 0", NULL, 0, NULL);
+				Sleep(300);
 				ExitGameButton = exitGameButton[2];
 				is_exit_game = true;
 			}
@@ -87,6 +90,7 @@ public:
 		if (map_button_x <= msg.x && msg.x <= map_button_x + map_button_w && map_button_y <= msg.y && msg.y <= map_button_y + map_button_h) {
 			MapButton = mapChangeButton[1];
 			if (msg.message == WM_LBUTTONDOWN) {
+				mciSendString(L"play exitgame from 0", NULL, 0, NULL);
 				map_index = (map_index + 1) % gameMaps.size();
 				map_manager.SwitchMap(map_index);
 

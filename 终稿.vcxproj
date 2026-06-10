@@ -118,6 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,6 +141,7 @@
     <ClInclude Include="map1.h" />
     <ClInclude Include="map2.h" />
     <ClInclude Include="mapManager.h" />
+    <ClInclude Include="mapSelectScene.h" />
     <ClInclude Include="menuScene.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="rebound.h" />

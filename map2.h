@@ -2,78 +2,44 @@
 
 #include <graphics.h>
 #include <string>
-#include <memory>
+#include <vector>
 #include "map.h"
 #include "util.h"
 
-
+extern vector<IMAGE> shadow;
+extern IMAGE GameMap;
 
 class Map2 : public Map {
-    friend void CollisionBoxDetction(player& p, const int& bx, const int& by, const int& bw, const int& bh);
 public:
     Map2() = default;
     ~Map2() = default;
 
-    void on_enter() {
-        BeginBatchDraw();
-        while (map2_enter_timer--) {
-            cleardevice();
-            unsigned char alpha = 255 * (map2_enter_delay - map2_enter_timer) / map2_enter_delay;
-            Alpha_putimage(0, 0, GameMap, alpha);
-
-            FlushBatchDraw();
-        }
-        EndBatchDraw();
-        map2_enter_timer = map2_enter_delay;
-        // µØÍ¼1ÌØÓĞµÄ½øÈëÂß¼­
+    void on_enter() override {
+        mciSendString(L"play bgm2 repeat from 0", NULL, 0, NULL);
     }
 
-    void on_exit() {
-        BeginBatchDraw();
-        while (map2_exit_timer--) {
-            cleardevice();
-            unsigned char alpha = 255 * map2_exit_timer / map2_exit_delay;
-            Alpha_putimage(0, 0, GameMap, alpha);
-
-            FlushBatchDraw();
-        }
-        EndBatchDraw();
-        map2_exit_timer = map2_exit_delay;
-        // µØÍ¼1ÌØÓĞµÄÍË³öÂß¼­
+    void on_exit() override {
+        mciSendString(L"stop bgm2 ", NULL, 0, NULL);
     }
-
 
     void Render() override {
-        Map::Render();
-        // µØÍ¼2ÌØÓĞµÄäÖÈ¾Âß¼­
+        // èƒŒæ™¯å·²ç»åœ¨ GameScene ä¸­ç»˜åˆ¶
     }
 
-    void on_update(player& p) {
+    void on_update(player& p) override {
         p.vy += map2_g;
 
-        //bottom1
-        //rectangle(bottom1_x, bottom1_y, bottom1_x + bottom1_w, bottom1_y + bottom1_h);
-        CollisionBoxDetction(p, bottom1_x, bottom1_y, bottom1_w, bottom1_h);
-        //bottom2_left
-        //rectangle(bottom2_left_x, bottom2_left_y, bottom2_left_x + bottom2_left_w, bottom2_left_y + bottom2_left_h);
-        CollisionBoxDetction(p, bottom2_left_x, bottom2_left_y, bottom2_left_w, bottom2_left_h);
-        //bottom2_right
-        //rectangle(bottom2_right_x, bottom2_right_y, bottom2_right_x + bottom2_right_w, bottom2_right_y + bottom2_right_h);
-        CollisionBoxDetction(p, bottom2_right_x, bottom2_right_y, bottom2_right_w, bottom2_right_h);
-        //bottom3
-        //rectangle(bottom3_x, bottom3_y, bottom3_x + bottom3_w, bottom3_y + bottom3_h);
-        CollisionBoxDetction(p, bottom3_x, bottom3_y, bottom3_w, bottom3_h);
-        if (p.isAboveGround) {
-            Alpha_putimage(p.shadow_x, p.shadow_y, shadow[p.shadow_idx]);
-        }
-        p.shadow_y =INT_MAX;
-        // µØÍ¼2ÌØÓĞµÄ¸üĞÂÂß¼­
+        // ç¢°æ’æ£€æµ‹é€»è¾‘ï¼šæ ¹æ®ä¸åŒçš„æ–¹å—åŒºåŸŸè¿›è¡Œæ£€æµ‹
+        CollisionBoxDetction(p, (double)bottom1_x, (double)bottom1_y, (double)bottom1_w, (double)bottom1_h);
+        CollisionBoxDetction(p, (double)bottom2_left_x, (double)bottom2_left_y, (double)bottom2_left_w, (double)bottom2_left_h);
+        CollisionBoxDetction(p, (double)bottom2_right_x, (double)bottom2_right_y, (double)bottom2_right_w, (double)bottom2_right_h);
+        CollisionBoxDetction(p, (double)bottom3_x, (double)bottom3_y, (double)bottom3_w, (double)bottom3_h);
     }
 
 private:
-    IMAGE bgImg;
-    // µØÍ¼2ÌØÓĞµÄ³ÉÔ±
-    const int map2_g = 3;
+    const double map2_g = 0.8; // å¹³æ»‘é‡åŠ›
+
+    // åœ°å›¾æ–¹å—åæ ‡å¸¸é‡
     const int bottom1_x = 455;
     const int bottom1_y = 695;
     const int bottom1_w = 690;
@@ -93,10 +59,4 @@ private:
     const int bottom3_y = 430;
     const int bottom3_w = 380;
     const int bottom3_h = 60;
-
-    const int map2_exit_delay = 100;
-    int map2_exit_timer = map2_exit_delay;
-    const int map2_enter_delay = 200;
-    int map2_enter_timer = map2_enter_delay;
-
 };
